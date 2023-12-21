@@ -1,5 +1,5 @@
-import Blog from "../../Blog"
 import './HomePage.css'
+import Blog from "../Blog";
 
 const HomePage = () => {
     const {

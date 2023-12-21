@@ -10,9 +10,9 @@ function App() {
     return (
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<HomePage/>}></Route>
-                <Route path='/addblog' element={<AddBlog/>}></Route>
-                <Route path='/moreinfo' element={<MoreInfo/>}></Route>
+                <Route path='/blogredberry' element={<HomePage/>}/>
+                <Route path='/addblog' element={<AddBlog/>}/>
+                <Route path='/moreinfo' element={<MoreInfo/>}/>
             </Routes>
         </BrowserRouter>
     )

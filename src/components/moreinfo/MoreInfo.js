@@ -1,5 +1,5 @@
 import './MoreInfo.css'
-import Blog from "../../Blog";
+import Blog from "../Blog";
 
 const MoreInfo = () => {
     const {
@@ -27,7 +27,7 @@ const MoreInfo = () => {
             <header className="header">
                 <div className='container d-flex justify-content-between'>
                     <div className="logo">
-                        <img className='logo-img' src="/LOGO-02 3.png" alt="Logo"/>
+                        <img className='logo-img' src="LOGO-02 3.png" alt="Logo"/>
                     </div>
 
                     <div className="log-in-button">

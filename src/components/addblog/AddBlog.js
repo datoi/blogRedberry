@@ -1,4 +1,18 @@
+import Blog from "../Blog";
+
 const AddBlog = () => {
+
+    const {
+        categories,
+        handleSelectInputChange,
+        handleFileInputChange,
+        handleInputChange,
+        post,
+        handlePublish
+    } = Blog()
+
+
+
     return (
         <div className="add_blog_container">
             <header className="header">
@@ -9,43 +23,46 @@ const AddBlog = () => {
                 </div>
             </header>
             <div>
-                <h1>ბლოგის დამატება</h1>
+                <h1>add blog</h1>
             </div>
             <div>
-                <label htmlFor="">ატვირთეთ ფოტო</label>
-                <input type="file"/>
+                <label htmlFor="">upload picture</label>
+                <input type="file" id="image" name="image" onChange={handleFileInputChange}/>
             </div>
             <div>
                 <div>
-                    <label htmlFor="">ავტორი</label>
-                    <input type="text"/>
+                    <label htmlFor="">author</label>
+                    <input type="text" name="author" onChange={handleInputChange}/>
                 </div>
                 <div>
-                    <label htmlFor="">სათაური</label>
-                    <input type="text"/>
+                    <label htmlFor="">title</label>
+                    <input type="text" name="title" onChange={handleInputChange}/>
                 </div>
                 <div>
-                    <label htmlFor="">აღწერა</label>
-                    <input type="text"/>
+                    <label htmlFor="">description</label>
+                    <input type="text" name="description" onChange={handleInputChange}/>
                 </div>
                 <div>
                     <div>
-                        <label htmlFor="">გამოქვეყნების თარიღ</label>
-                        <input type="date"/>
+                        <label htmlFor="">date</label>
+                        <input type="date" name="publish_date" onChange={handleInputChange}/>
                     </div>
                     <div>
-                        <label htmlFor="">კატეგორია</label>
-                        <select name="" id="">
-                            <option value=""></option>
+                        <label htmlFor="categories">categories</label>
+                        <select name="categories" id="categories" multiple onChange={handleSelectInputChange}>
+                            {categories.map((category) => (
+                                <option key={category.id}>{category.title}</option>
+                            ))}
                         </select>
                     </div>
                 </div>
                 <div>
-                    <label htmlFor="">ელ-ფოსტა</label>
-                    <input type="email"/>
+                    <label htmlFor="">e-mail</label>
+                    <input type="email" name="email" onChange={handleInputChange}/>
                 </div>
+
                 <div>
-                    <button>გამოქვეყნება</button>
+                    <button onClick={handlePublish}>publish</button>
                 </div>
             </div>
         </div>
