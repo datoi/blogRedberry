@@ -1,12 +1,16 @@
-.more_info_container{
-        width: 720px;
+.blog_img{
+    width: 500px;
 }
-.more_info_blog {
-    padding: 0 200px;
-    text-align: center;
+.slide_button{
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
 }
 
 .blog_slides {
     padding: 0 200px;
     text-align: center;
+}
+
+.blog_slide_img{
 }

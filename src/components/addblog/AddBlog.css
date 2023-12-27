@@ -1,3 +1,127 @@
-.add_blog_container{
+.add_blog_container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.logo-img {
+    width: 150px;
+    height: auto;
+}
+.add_blog_inside_container{
     width: 600px;
+}
+.file-input-container {
+    border: 2px dashed #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.file-name-container{
+    border-radius: 12px;
+}
+.file-input-container label {
+    cursor: pointer;
+    height: 208px;
+}
+
+.preview {
+    width: 200px;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #eee;
+}
+
+.preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.form-field {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+
+.form-label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-input, .form-date {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 12px !important;
+    box-sizing: border-box;
+}
+
+ .form-textarea {
+    height: 100px;
+    resize: vertical;
+}
+
+.form-message {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+
+
+.form-select {
+    width: calc(50% - 6px);
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Button Styles */
+.form-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.form-button:hover {
+    background-color: #45a049;
+}
+
+.error {
+    color: red;
+}
+
+.valid {
+    color: green;
+}
+
+.form-input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    transition: border-color 0.3s;
+    outline: none; /* Add this line to remove the default focus outline */
+}
+
+.form-input.typing:focus {
+    border-color: purple !important;
+}
+.form-input.empty {
+    background-color: #F2F2FA; /* Set the background color for empty state */
+}
+
+.form-input.invalid {
+    border-color: red; /* Set the border color for invalid state */
+    background-color: #FAF2F3; /* Set the background color for invalid state */
+}
+
+.form-input.valid {
+    border-color: green; /* Set the border color for valid state */
+    background-color: #F8FFF8; /* Set the background color for valid state */
 }

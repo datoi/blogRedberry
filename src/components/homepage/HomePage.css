@@ -1,5 +1,5 @@
 body {
-    background-color: #E4E3EB;
+    background-color: #fafafc;
 }
 
 .header {
@@ -12,7 +12,7 @@ body {
 }
 
 .logo-img {
-    width: 100px;
+    width: 150px;
     height: auto;
 }
 
@@ -20,19 +20,19 @@ body {
     margin: 0 24px;
 }
 
-.blogs-container {
-    width: 1288px;
-    height: 620px;
+.blog-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
 }
 
-.categories{
+.categories {
     padding: 0 300px;
     display: grid;
     grid-template-columns: repeat(6, minmax(0, 1fr));
 }
-.popup_Window{
+
+.popup_Window {
     left: 35%;
     top: 50%;
     border-radius: 12px;
@@ -42,6 +42,7 @@ body {
     width: 500px;
     height: 200px;
 }
-.blog-img{
+
+.blog-img {
     width: 100%;
 }

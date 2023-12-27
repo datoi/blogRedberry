@@ -1,19 +1,25 @@
 import axios from 'axios';
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import {useNavigate} from 'react-router-dom';
 
 
 const Blog = () => {
+    const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const [selectedDate, setSelectedDate] = useState('')
+    const [isPublished, setPublished] = useState(false);
     const [author, setAuthor] = useState('')
     const [title, setTitle] = useState('')
     const [description, setDescription] = useState('')
     const [email, setEmail] = useState('')
     const [login, setLogin] = useState('')
     const [blogs, setBlogs] = useState([])
-    const [loginBar, setLoginBar] = useState(false)
     const [popup, setPopup] = useState(false)
+    const [moreInfo, setMoreInfo] = useState([]);
     const [categories, setCategories] = useState([]);
-    // const [token, setToken] = useState(null);
+    const fileInputRef = useRef(null);
+
+    const [fileName, setFileName] = useState(null);
+
     const [post, setPost] = useState({
         title: '',
         description: '',
@@ -23,7 +29,7 @@ const Blog = () => {
         categories: [],
         email: '',
     });
-    const token = 'a253a4fe0494517eab9d3bd834386e6c22c24fb836f424260d6392f3730ff7c8';
+    const token = 'af666e88379c02d142e59bf4c29867b62f165acf90d9e8c356da6c3364adde65 ';
 
     useEffect(() => {
         // const initData = async () => {
@@ -31,7 +37,9 @@ const Blog = () => {
         //     setToken(response.data.token)
         //      ;
         // }
-
+        const updateLocalStorage = () => {
+            localStorage.setItem('blogFormData', JSON.stringify(post));
+        };
         const fetchData = async () => {
 
             const config = {
@@ -74,13 +82,17 @@ const Blog = () => {
         fetchData()
         // initData();
     }, []);
-
-
+    const categoriesFilter = (categoryId) => {
+        setSelectedCategoryId(categoryId);
+    };
+    const filteredBlogs = selectedCategoryId
+        ? blogs.filter((blog) =>
+            blog.categories.some((category) => category.id === selectedCategoryId)
+        )
+        : blogs;
     const handleAuthorChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}))
         setAuthor(e.target.value)
-
-
     };
     const handleTitleChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}))
@@ -92,6 +104,7 @@ const Blog = () => {
     };
     const handleDateChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}));
+        setSelectedDate(e.target.value);
 
         if (e.target.type === 'date' && e.target.value === '') {
             e.target.style.borderColor = 'red';
@@ -102,11 +115,19 @@ const Blog = () => {
 
     const handleFileInputChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.files[0]}))
+        const file = e.target.files[0];
+        if (file) {
+            setFileName(file.name);
+        }
     }
+    const handleDelete = () => {
+        setFileName(null);
+        fileInputRef.current.value = null; // Reset the input
+    };
 
     const handleEmailChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}))
-
+    console.log(post )
         const isEmailValid = e.target.value.endsWith("@redberry.ge");
         if (!isEmailValid) {
             e.target.style.borderColor = 'red';
@@ -116,15 +137,14 @@ const Blog = () => {
         setEmail(e.target.value)
     };
 
+    let tmpCategories = [];
     const handleSelectInputChange = (e) => {
-        let tmpCategories = [];
 
         for (let i = 0; i < e.target.options.length; i++) {
             if (e.target.options[i].selected && tmpCategories.indexOf(e.target.options[i].value) === -1) {
-                tmpCategories.push(e.target.options[i].value, e.target.value);
+                tmpCategories.push(e.target.options[i].value);
             }
         }
-
         setPost(({...post, categories: tmpCategories}))
         if (tmpCategories.length === 0) {
             e.target.style.borderColor = 'red';
@@ -135,6 +155,7 @@ const Blog = () => {
 
 
     const handlePublish = async () => {
+
         navigate('/blogredberry')
         const postData = new FormData();
         postData.append('title', post.title);
@@ -150,10 +171,21 @@ const Blog = () => {
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
+                'Content-Type': 'multipart/form-data',
             },
         };
         const response = await axios.post('https://api.blog.redberryinternship.ge/api/blogs', postData, config);
-
+        const currentDate = new Date();
+        const selectedPublishDate = new Date(selectedDate);
+        console.log(selectedPublishDate)
+        if (selectedPublishDate <= currentDate) {
+            console.log('Content published on:', currentDate);
+            setPublished(true);
+        } else {
+            console.log('Content scheduled for publication on:', selectedPublishDate);
+            setPublished(true);
+        }
+        console.log(post)
     };
 
 
@@ -178,11 +210,24 @@ const Blog = () => {
         setPopup(false)
     }
 
-    const MoreClick = () => {
-        navigate('/moreinfo')
-    }
+
+    const MoreClick = async () => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+
+        const responseBlog = await axios.get(`https://api.blog.redberryinternship.ge/api/blogs`, config)
+        const dataBlog = responseBlog.data.data
+
+    };
+
     const navigateClick = () => {
         navigate('/addblog')
+    }
+    const homeClick = () =>{
+        navigate('/blogredberry')
     }
 
     return {
@@ -193,7 +238,6 @@ const Blog = () => {
         closePopupClick,
         MoreClick,
         loginClick,
-        loginBar,
         popupClick,
         handleAuthorChange,
         handleFileInputChange,
@@ -208,7 +252,17 @@ const Blog = () => {
         description,
         handleDateChange,
         handleEmailChange,
-        email
+        email,
+        categoriesFilter,
+        selectedCategoryId,
+        filteredBlogs,
+        selectedDate,
+        isPublished,
+        moreInfo,
+        homeClick,
+        fileName,
+        handleDelete,
+        fileInputRef
     }
 }
 
