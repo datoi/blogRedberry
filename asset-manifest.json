@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/blogredberry/static/css/main.e8b0c824.css",
-    "main.js": "/blogredberry/static/js/main.8faeb087.js",
+    "main.css": "/blogredberry/static/css/main.73a31769.css",
+    "main.js": "/blogredberry/static/js/main.aac609e6.js",
     "index.html": "/blogredberry/index.html",
-    "main.e8b0c824.css.map": "/blogredberry/static/css/main.e8b0c824.css.map",
-    "main.8faeb087.js.map": "/blogredberry/static/js/main.8faeb087.js.map"
+    "main.73a31769.css.map": "/blogredberry/static/css/main.73a31769.css.map",
+    "main.aac609e6.js.map": "/blogredberry/static/js/main.aac609e6.js.map"
   },
   "entrypoints": [
-    "static/css/main.e8b0c824.css",
-    "static/js/main.8faeb087.js"
+    "static/css/main.73a31769.css",
+    "static/js/main.aac609e6.js"
   ]
 }
