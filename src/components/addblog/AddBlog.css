@@ -51,6 +51,7 @@
 }
 
 .form-input, .form-date {
+    width: 288px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 12px !important;
@@ -70,43 +71,64 @@
 
 
 .form-select {
-    width: calc(50% - 6px);
+    width: 288px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
 }
+.form_title{
+    font-family: FiraGo;
+    font-weight: bold;
+    font-size: 32px;
+    margin-bottom: 25px;
+}
+label{
+    font-family: FiraGO;
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 20px;
+    letter-spacing: 0em;
+    text-align: left;
 
+}
 /* Button Styles */
 .form-button {
     background-color: #4CAF50;
+    padding: 10px 85px;
     color: white;
-    padding: 10px 15px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+.form-button-field{
+    display: flex;
+    justify-content: right;
 }
 
 .form-button:hover {
     background-color: #45a049;
 }
 
-.error {
-    color: red;
-}
+/*.error {*/
+/*    color: red;*/
+/*}*/
 
-.valid {
-    color: green;
-}
+/*.valid {*/
+/*    color: green;*/
+/*}*/
 
+input,textarea{
+    font-size: 14px;
+}
 .form-input {
-    width: 100%;
+    width: 288px;
     padding: 8px;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
     transition: border-color 0.3s;
-    outline: none; /* Add this line to remove the default focus outline */
+    outline: none;
 }
 
 .form-input.typing:focus {

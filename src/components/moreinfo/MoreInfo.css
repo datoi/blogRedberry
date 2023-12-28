@@ -1,5 +1,10 @@
 .blog_img{
-    width: 500px;
+    width: 100%;
+    height: 328px;
+}
+.blog_container{
+    display: flex;
+    justify-content: center;
 }
 .slide_button{
     border-radius: 50%;
@@ -8,9 +13,11 @@
 }
 
 .blog_slides {
-    padding: 0 200px;
+    padding: 40px;
     text-align: center;
 }
 
 .blog_slide_img{
+    width: 408px;
+    height: 328px;
 }

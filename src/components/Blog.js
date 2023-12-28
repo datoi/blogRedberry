@@ -12,11 +12,14 @@ const Blog = () => {
     const [description, setDescription] = useState('')
     const [email, setEmail] = useState('')
     const [login, setLogin] = useState('')
+    const [loginBar, setLoginBar] = useState(false)
     const [blogs, setBlogs] = useState([])
     const [popup, setPopup] = useState(false)
     const [moreInfo, setMoreInfo] = useState([]);
     const [categories, setCategories] = useState([]);
     const fileInputRef = useRef(null);
+    const [isTyping, setIsTyping] = useState(false);
+
 
     const [fileName, setFileName] = useState(null);
 
@@ -29,7 +32,13 @@ const Blog = () => {
         categories: [],
         email: '',
     });
-    const token = 'af666e88379c02d142e59bf4c29867b62f165acf90d9e8c356da6c3364adde65 ';
+    const truncateStyle = {
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        WebkitLineClamp: 2,
+    };
+    const token = '1931f8266f98937a118d220178ee826aa383bf384853f22adc853132d317b29d';
 
     useEffect(() => {
         // const initData = async () => {
@@ -82,6 +91,13 @@ const Blog = () => {
         fetchData()
         // initData();
     }, []);
+    const fetchCategoryTitle = (categoryId) => {
+        const matchingCategory = categories.find(category => category.id === categoryId);
+        return matchingCategory ? matchingCategory.title : ''; 
+    };
+    const handleBlogCategoryClick = (categoryId) => {
+        categoriesFilter(categoryId);
+    };
     const categoriesFilter = (categoryId) => {
         setSelectedCategoryId(categoryId);
     };
@@ -139,14 +155,20 @@ const Blog = () => {
 
     let tmpCategories = [];
     const handleSelectInputChange = (e) => {
+        const selectedCategory = e.target.value;
 
-        for (let i = 0; i < e.target.options.length; i++) {
-            if (e.target.options[i].selected && tmpCategories.indexOf(e.target.options[i].value) === -1) {
-                tmpCategories.push(e.target.options[i].value);
-            }
-        }
-        setPost(({...post, categories: tmpCategories}))
-        if (tmpCategories.length === 0) {
+        setPost((prevPost) => {
+            const updatedCategories = prevPost.categories.includes(selectedCategory)
+                ? prevPost.categories.filter((category) => category !== selectedCategory)
+                : [...prevPost.categories, selectedCategory];
+
+            return {
+                ...prevPost,
+                categories: updatedCategories,
+            };
+        });
+
+        if (post.categories.length === 0) {
             e.target.style.borderColor = 'red';
         } else {
             e.target.style.borderColor = 'green';
@@ -185,14 +207,17 @@ const Blog = () => {
             console.log('Content scheduled for publication on:', selectedPublishDate);
             setPublished(true);
         }
+
         console.log(post)
     };
 
 
     const loginClick = async () => {
-        const response = await axios.post('https://api.blog.redberryinternship.ge/api/login');
-        const responseData = response.data;
-        const apiEmail = responseData.email;
+        // const response = await axios.post('https://api.blog.redberryinternship.ge/api/login');
+        // const responseData = response.data;
+        // const apiEmail = responseData.email;
+        setLoginBar(true)
+        setPopup(false)
     };
 
     const loginType = (e) => {
@@ -212,6 +237,11 @@ const Blog = () => {
 
 
     const MoreClick = async () => {
+        navigate('/moreinfo')
+        if (loginBar === true) {
+            setLoginBar(true)
+        }
+    console.log(loginBar)
         const config = {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -223,13 +253,19 @@ const Blog = () => {
 
     };
 
+
     const navigateClick = () => {
         navigate('/addblog')
     }
     const homeClick = () =>{
         navigate('/blogredberry')
     }
-
+    const handleTyping = () => {
+        setIsTyping(true);
+    };
+    const handleBlur = () => {
+        setIsTyping(false);
+    };
     return {
         categories,
         blogs,
@@ -262,7 +298,15 @@ const Blog = () => {
         homeClick,
         fileName,
         handleDelete,
-        fileInputRef
+        fileInputRef,
+        navigate,
+        fetchCategoryTitle,
+        handleBlogCategoryClick,
+        isTyping,
+        handleTyping,
+        handleBlur,
+        truncateStyle,
+        loginBar
     }
 }
 
