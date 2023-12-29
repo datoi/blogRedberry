@@ -288,7 +288,7 @@ const Blog = () => {
     }
 
 
-    const MoreClick = async (item) => {
+    const MoreClick = (item) => {
         window.location.href = '/moreinfo/' + item.id
     };
 
