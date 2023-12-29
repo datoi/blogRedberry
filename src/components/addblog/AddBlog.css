@@ -142,8 +142,15 @@ input,textarea{
     border-color: red;
     background-color: #FAF2F3;
 }
+.form_label.invalid{
+    background-color: #FAF2F3;
+
+}
 
 .form-input.valid {
     border-color: green;
     background-color: #F8FFF8;
+}
+.css-13cymwt-control{
+    border-radius: 12px !important;
 }

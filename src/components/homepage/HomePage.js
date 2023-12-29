@@ -1,7 +1,6 @@
 import './HomePage.css'
 import Blog from "../Blog";
-import {useState} from "react";
-
+import '../../App.css'
 
 const HomePage = () => {
     const {
@@ -19,24 +18,39 @@ const HomePage = () => {
         fetchCategoryTitle,
         handleBlogCategoryClick,
         truncateStyle,
-        isActive
-
+        isTyping,
+        loginType,
+        loginErrorText,
+        successPopup,
     } = Blog()
 
-    const [isTyping, setIsTyping] = useState(false);
-
-    const loginType = () => {
-        setIsTyping(true);
-    };
 
     return (
         <div>
+                {successPopup ? <div>
+                        <div className='overlay'></div>
+                        <div className='popup_Window position-fixed container px-4'>
+                            <header className='d-flex justify-content-end'>
+                                <button className='x_button border-0 mt-3 bg-transparent' onClick={closePopupClick}><img src={process.env.PUBLIC_URL + '/add.png'}
+                                                                                                                         alt=""/></button>
+                            </header>
+                            <img className='mb-2' src={process.env.PUBLIC_URL + '/tick-circle.png'} alt=""/>
+                            <div>
+                                <h3 className='login_title mb-5'>წარმატებული ავტორიზაცია</h3>
+                            </div>
+
+                            <div>
+                                <button className='popup_login border-0' onClick={closePopupClick}>კარგი</button>
+                            </div>
+                        </div>
+                    </div> : null}
             {popup ? <div>
                 <div className='overlay'></div>
                 <div className='popup_Window position-fixed container px-4'>
                     <header className='d-flex justify-content-end'>
-                        <button className='x_button border-0 mt-3 bg-transparent' onClick={closePopupClick}><img src={process.env.PUBLIC_URL + '/add.png'}
-                                                                                                            alt=""/></button>
+                        <button className='x_button border-0 mt-3 bg-transparent' onClick={closePopupClick}><img
+                            src={process.env.PUBLIC_URL + '/add.png'}
+                            alt=""/></button>
                     </header>
                     <div>
                         <h3 className='login_title mb-4'>შესვლა</h3>
@@ -44,6 +58,7 @@ const HomePage = () => {
                     <div className='mb-4'>
                         <p className='mail_reference text-start my-1'>ელ-ფოსტა</p>
                         <input
+                            id='loginInput'
                             className='mail_input ps-3'
                             placeholder='Example@redberry.ge'
                             onChange={loginType}
@@ -55,6 +70,13 @@ const HomePage = () => {
                                 outline: 'none',
                             }}
                         />
+                        {loginErrorText? <p style={{
+                            textAlign:'start',
+                            color: 'red',
+                            fontFamily: 'FiraGO',
+                            fontSize: '12px',
+
+                        }}><img src={process.env.PUBLIC_URL + '/info-circle.png'} alt=""/>ელ ფოსტა არ მოიძებნა</p>: null}
                     </div>
                     <div>
                         <button className='popup_login border-0' onClick={loginClick}>შესვლა</button>
@@ -74,7 +96,7 @@ const HomePage = () => {
                     </div>
 
                     <div className="">
-                        {loginBar ? <button onClick={navigateClick}>დაამატე ბლოგი</button> :
+                        {loginBar ? <button className='login' onClick={navigateClick}>დაამატე ბლოგი</button> :
                             <button className='login border-0' onClick={popupClick}>შესვლა</button>}
                     </div>
                 </div>
@@ -82,11 +104,11 @@ const HomePage = () => {
 
             <div style={{marginTop: '90px'}} className='container align-items-center'>
                 <div className='d-flex justify-content-between w-100'>
-                    <h1 className='page_title d-flex align-items-center'></h1>
+                    <h1 className='page_title d-flex align-items-center'>ბლოგი</h1>
                     <img className='page_image' src={process.env.PUBLIC_URL + '/Blog-1024x355 1.jpg'} alt=""/>
                 </div>
             </div>
-            <div className='container categories my-5' style={{ overflowX: 'auto' }}>
+            <div className='container categories my-5' style={{overflowX: 'auto'}}>
                 <div className="d-flex">
                     {categories.map((category) => (
                         <button
@@ -111,7 +133,7 @@ const HomePage = () => {
             </div>
             <div className="container">
                 <div className="row">
-                    {filteredBlogs.map((item) => (
+                    {filteredBlogs.filter(o => Date.parse(o.publish_date) <= new Date()).map((item) => (
                         <div key={item.id} className="col-lg-4 col-md-6 mb-4">
                             <div className="blog">
                                 <img src={item.image} className="my-2 blog-img" alt=""/>
@@ -138,8 +160,10 @@ const HomePage = () => {
                                     ))}
                                 </div>
                                 <p className="description my-2" style={truncateStyle}>{item.description}</p>
-                                <button onClick={() => MoreClick(item)} className="more_button my-2 border-0 bg-transparent">სრულად ნახვა <img src={process.env.PUBLIC_URL + '/morearrow.png'}
-                                                                                                           alt=""/>
+                                <button onClick={() => MoreClick(item)}
+                                        className="more_button my-2 border-0 bg-transparent">სრულად ნახვა <img
+                                    src={process.env.PUBLIC_URL + '/morearrow.png'}
+                                    alt=""/>
                                 </button>
                             </div>
                         </div>

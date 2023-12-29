@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {useEffect, useRef, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
+import {json, useNavigate} from 'react-router-dom';
 
 
 const Blog = () => {
@@ -16,13 +16,13 @@ const Blog = () => {
     const [loginBar, setLoginBar] = useState(false)
     const [blogs, setBlogs] = useState([])
     const [popup, setPopup] = useState(false)
-    const [moreInfo, setMoreInfo] = useState([]);
     const [categories, setCategories] = useState([]);
     const fileInputRef = useRef(null);
     const [isTyping, setIsTyping] = useState(false);
     const [isActive, setIsActive] = useState(false);
-
     const [fileName, setFileName] = useState(null);
+    const [loginErrorText, setLoginErrorText] = useState(false)
+    const [successPopup, setSuccessPopup] = useState(false)
 
     const [post, setPost] = useState({
         title: '',
@@ -34,7 +34,7 @@ const Blog = () => {
         email: '',
     });
     const truncateStyle = {
-        display:  '-webkit-box',
+        display: '-webkit-box',
         WebkitBoxOrient: 'vertical',
         overflow: 'hidden',
         WebkitLineClamp: 2,
@@ -45,17 +45,11 @@ const Blog = () => {
         textAlign: 'left',
         color: '#404049'
     };
-    const token = '1931f8266f98937a118d220178ee826aa383bf384853f22adc853132d317b29d';
+
+
+    const token = localStorage.getItem('token');
 
     useEffect(() => {
-        // const initData = async () => {
-        //     const response = await axios.get(`https://api.blog.redberryinternship.ge/api/token`)
-        //     setToken(response.data.token)
-        //      ;
-        // }
-        const updateLocalStorage = () => {
-            localStorage.setItem('blogFormData', JSON.stringify(post));
-        };
         const fetchData = async () => {
 
             const config = {
@@ -95,12 +89,15 @@ const Blog = () => {
 
             setCategories(dataCategoriesList);
         };
-        fetchData()
-        // initData();
+        fetchData();
+
+        if (localStorage.getItem('isLoggedIn') === '1') {
+            setLoginBar(true);
+        }
     }, []);
     const fetchCategoryTitle = (categoryId) => {
         const matchingCategory = categories.find(category => category.id === categoryId);
-        return matchingCategory ? matchingCategory.title : ''; 
+        return matchingCategory ? matchingCategory.title : '';
     };
     const handleBlogCategoryClick = (categoryId) => {
         categoriesFilter(categoryId);
@@ -122,21 +119,47 @@ const Blog = () => {
             blog.categories.some((category) => selectedCategoryIds.includes(category.id))
         )
         : blogs;
+    useEffect(() => {
+        setAuthor(localStorage.getItem("author") ?? '');
+        setTitle(localStorage.getItem("title") ?? '');
+        setDescription(localStorage.getItem("description") ?? '');
+        setSelectedDate(localStorage.getItem("date") ?? '');
+        setFileName(null);
+        setSelectedCategoryId(JSON.parse(localStorage.getItem("categories")) ?? []);
+        setEmail(localStorage.getItem("email") ?? '');
+
+        setPost({
+            author: localStorage.getItem("author") ?? '',
+            title: localStorage.getItem("title") ?? '',
+            description: localStorage.getItem("description") ?? '',
+            publish_date: localStorage.getItem("date") ?? '',
+            image: localStorage.getItem("file") ?? '',
+            email: localStorage.getItem("email") ?? '',
+            categories: JSON.parse(localStorage.getItem("categories")) ?? []
+        });
+
+    }, []);
     const handleAuthorChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}))
         setAuthor(e.target.value)
+        localStorage.setItem("author", e.target.value);
     };
     const handleTitleChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}))
         setTitle(e.target.value)
+        localStorage.setItem("title", e.target.value);
+
     };
     const handleDescriptionChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}))
         setDescription(e.target.value)
+        localStorage.setItem("description", e.target.value);
+
     };
     const handleDateChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}));
         setSelectedDate(e.target.value);
+        localStorage.setItem("date", e.target.value);
 
         if (e.target.type === 'date' && e.target.value === '') {
             e.target.style.borderColor = 'red';
@@ -151,6 +174,8 @@ const Blog = () => {
         if (file) {
             setFileName(file.name);
         }
+        localStorage.setItem("file", e.target.value);
+
     }
     const handleDelete = () => {
         setFileName(null);
@@ -159,7 +184,6 @@ const Blog = () => {
 
     const handleEmailChange = (e) => {
         setPost(({...post, [e.target.name]: e.target.value}))
-    console.log(post )
         const isEmailValid = e.target.value.endsWith("@redberry.ge");
         if (!isEmailValid) {
             e.target.style.borderColor = 'red';
@@ -167,28 +191,25 @@ const Blog = () => {
             e.target.style.borderColor = 'green';
         }
         setEmail(e.target.value)
+        localStorage.setItem("email", e.target.value);
+        console.log(post)
     };
 
-    let tmpCategories = [];
     const handleSelectInputChange = (e) => {
-        const selectedCategory = e.target.value;
-
         setPost((prevPost) => {
-            const updatedCategories = prevPost.categories.includes(selectedCategory)
-                ? prevPost.categories.filter((category) => category !== selectedCategory)
-                : [...prevPost.categories, selectedCategory];
-
             return {
                 ...prevPost,
-                categories: updatedCategories,
+                categories: e,
             };
         });
 
         if (post.categories.length === 0) {
-            e.target.style.borderColor = 'red';
+            document.getElementById('select').style.borderColor = 'red';
         } else {
-            e.target.style.borderColor = 'green';
+            document.getElementById('select').style.borderColor = 'green';
         }
+        localStorage.setItem("categories", JSON.stringify(e));
+
     };
 
 
@@ -202,7 +223,7 @@ const Blog = () => {
         postData.append('email', post.email);
 
         for (let i = 0; i < post.categories.length; i++) {
-            postData.append('categories[]', post.categories[i]);
+            postData.append('categories[]', post.categories[i].id);
         }
         const config = {
             headers: {
@@ -228,16 +249,31 @@ const Blog = () => {
 
 
     const loginClick = async () => {
-        // const response = await axios.post('https://api.blog.redberryinternship.ge/api/login');
-        // const responseData = response.data;
-        // const apiEmail = responseData.email;
-        setLoginBar(true)
-        setPopup(false)
+        try {
+            const response = await axios.post('https://api.blog.redberryinternship.ge/api/login', {
+                email: login
+            });
+
+            setLoginBar(true);
+            setPopup(false);
+            localStorage.setItem('isLoggedIn', 1);
+            setSuccessPopup(true)
+        } catch (ex) {
+
+            const emailInput = document.getElementById('loginInput');
+            if (emailInput) {
+                emailInput.style.borderColor = 'red';
+                emailInput.style.backgroundColor = '#ffebee';
+            }
+            setLoginErrorText(true)
+            setSuccessPopup(false)
+        }
     };
+
 
     const loginType = (e) => {
         setLogin(e.target.value)
-        console.log(e.target.value)
+
     }
 
 
@@ -248,32 +284,39 @@ const Blog = () => {
 
     const closePopupClick = () => {
         setPopup(false)
+        setSuccessPopup(false)
     }
 
 
-    const MoreClick = async () => {
-        navigate('/moreinfo')
-        if (loginBar === true) {
-            setLoginBar(true)
-        }
-    console.log(loginBar)
-        const config = {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        };
-
-        const responseBlog = await axios.get(`https://api.blog.redberryinternship.ge/api/blogs`, config)
-        const dataBlog = responseBlog.data.data
-
+    const MoreClick = async (item) => {
+        window.location.href = '/moreinfo/' + item.id
     };
 
 
     const navigateClick = () => {
         navigate('/addblog')
     }
-    const homeClick = () =>{
+    const homeClick = () => {
         navigate('/blogredberry')
+    }
+    const clearStorage = () => {
+        navigate('/blogredberry')
+        setAuthor('');
+        localStorage.removeItem("author")
+        setTitle('');
+        localStorage.removeItem("title")
+        setDescription('');
+        localStorage.removeItem("description")
+        setSelectedDate('');
+        localStorage.removeItem("date")
+        setFileName('');
+        localStorage.removeItem("file")
+        setSelectedCategoryId([]);
+        (localStorage.removeItem("categories"))
+        setEmail('');
+        localStorage.removeItem("email")
+        setPost({});
+
     }
     const handleTyping = () => {
         setIsTyping(true);
@@ -309,7 +352,6 @@ const Blog = () => {
         filteredBlogs,
         selectedDate,
         isPublished,
-        moreInfo,
         homeClick,
         fileName,
         handleDelete,
@@ -324,6 +366,9 @@ const Blog = () => {
         loginBar,
         isActive,
         selectedCategoryIds,
+        loginErrorText,
+        successPopup,
+        clearStorage
     }
 }
 

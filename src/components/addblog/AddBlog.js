@@ -1,6 +1,7 @@
     import Blog from "../Blog";
     import './AddBlog.css';
     import {useState, useEffect} from "react";
+    import Select from "react-select";
 
     const AddBlog = () => {
         const {
@@ -17,6 +18,7 @@
             handleEmailChange,
             email,
             selectedDate,
+            post,
             handleFileInputChange,
             fileName,
             handleDelete,
@@ -26,7 +28,8 @@
             handleTyping,
             homeClick,
             popup,
-            closePopupClick
+            closePopupClick,
+            clearStorage
         } = Blog()
         const isOnlyGeorgian = /^[ა-ჰ\s]+$/u.test(author);
         const isEmailValid = email.endsWith("@redberry.ge");
@@ -38,13 +41,8 @@
                 titleValidation() === 'valid' &&
                 descriptionValidation() === 'valid' &&
                 fileValidation() === 'valid'
-            );
+            )
         }, [author, title, description, fileName]);
-
-
-
-
-
 
         const handleClick = () => {
             if (isValid) {
@@ -94,7 +92,7 @@
                         </div>
 
                         <div>
-                            <button className='popup_login border-0' onClick={homeClick}>მთავარ გვერდზე დაბრუნება</button>
+                            <button className='popup_login border-0' onClick={clearStorage}>მთავარ გვერდზე დაბრუნება</button>
                         </div>
                     </div>
                 </div> : null}
@@ -106,7 +104,7 @@
                     </div>
                 </header>
                 <div style={{zIndex: '0',}} className='mt-3'>
-                    <button style={{position: 'absolute', marginLeft: '200px'}} onClick={homeClick}
+                    <button style={{position: 'absolute', marginLeft: '200px'}} onClick={clearStorage}
                             className='border-0 bg-transparent'><img
                         className=''
                         src={process.env.PUBLIC_URL + '/Arrow.png'}
@@ -155,7 +153,7 @@
                                 <div className="form-subfield">
                                     <label className="form-label" htmlFor="author">ავტორი *</label>
                                     <input
-                                        className={`form-input ${isTyping ? 'typing' : ''} ${author.trim().length === 0 ? 'empty' : (author.replace(/\s/g, "").length < 4 || author.trim().split(/\s+/).length < 1 || !isOnlyGeorgian ? 'invalid' : 'valid')}`}
+                                        className={`form-input ${isTyping ? 'typing' : ''} ${author.trim().length === 0 ? 'empty' : (author.replace(/\s/g, "").length < 4 || author.trim().split(/\s+/).length < 2  || !isOnlyGeorgian ? 'invalid' : 'valid')}`}
                                         type="text"
                                         style={{width: '288px'}}
                                         name="author"
@@ -222,7 +220,7 @@
                                 <div className="form-subfield">
                                     <label className="form-label" htmlFor="publishDate">გამოქვეყნების თარიღი*</label>
                                     <input
-                                        className={`form-date ${selectedDate.trim().length === 0 ? 'empty' : 'valid'}`}
+                                        className={`form-date ${selectedDate?.trim().length === 0 ? 'empty' : 'valid'}`}
                                         value={selectedDate}
                                         type="date"
                                         name="publish_date"
@@ -233,19 +231,37 @@
                                 </div>
                                 <div className="form-subfield">
                                     <label className="form-label" htmlFor="categories">კატეგორიები*</label>
-                                    <select
-                                        className="form-select"
-                                        name="categories"
-                                        id="categories"
-                                        multiple
-                                        onChange={handleSelectInputChange}
-                                    >
-                                        {categories.map((category) => (
-                                            <option key={category.id} value={category.id}>
-                                                {category.title}
-                                            </option>
-                                        ))}
-                                    </select>
+                                    <Select isMulti={true}
+                                            onChange={handleSelectInputChange}
+                                            onMenuOpen={() => {}}
+                                            onMenuClose={() => {}}
+                                            options={categories}
+                                            getOptionValue={o => o.id}
+                                            getOptionLabel={o => o.title}
+                                            id="select"
+                                            value={post.categories}
+                                            styles={{
+                                                control: (styles) => ({ ...styles, borderRadius: '12px', width: '288px' }),
+                                                multiValue: (styles, { data }) => {
+                                                    return {
+                                                        ...styles,
+                                                        backgroundColor: data.background_color,
+                                                        color: data.text_color,
+                                                        borderRadius: '30px',
+
+                                                        fontSize: '12px',
+                                                    fontWeight: '500',
+                                                    lineHeight: '16px',
+                                                    };
+                                                },
+                                                multiValueLabel: (styles, { data }) => ({
+                                                    ...styles,
+                                                    backgroundColor: data.background_color,
+                                                    color: data.text_color,
+                                                    borderRadius: '30px'
+                                                })
+                                            }}
+                                    />
                                 </div>
                             </div>
 
@@ -254,7 +270,8 @@
                                     <label className="form-label" htmlFor="email">ელ-ფოსტა</label>
                                     <input
                                         className={`form-input ${isTyping ? 'typing' : ''} ${email.trim().length === 0 ? 'empty' : (email.endsWith("@redberry.ge") ? 'valid' : 'invalid')}`}
-                                            onChange={handleEmailChange}
+                                        onChange={handleEmailChange}
+                                        value={email}
                                         type="email"
                                         name="email"
                                         placeholder='example@redberry.ge'
@@ -274,7 +291,7 @@
                                     className="form-button"
                                     onClick={handleClick}
                                     disabled={!isButtonClickable}
-                                    style={{backgroundColor: isButtonClickable ? '#800080' : '#E4E3EB'}}
+                                    style={{backgroundColor: isButtonClickable ? '#5D37F3' : '#E4E3EB'}}
                                 >
                                     გამოქვეყნება
                                 </button>
