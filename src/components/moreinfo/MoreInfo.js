@@ -33,11 +33,8 @@ const MoreInfo = () => {
         })
             .then(response => {
                 setBlog(response.data)
-
-                console.log(blogId);
-                console.log(blog);
             })
-    }, []);
+    }, [blogId]);
 
     const handlePrevClick = () => {
         if (blogs.length > 2) {
@@ -141,7 +138,7 @@ const MoreInfo = () => {
                         </button>
                     </div>
                 </div>
-                <div style={{width: '1288px'}} className='d-flex'>
+                <div className='d-flex'>
                     {filteredBlogs.slice(currentSlide, currentSlide + 3).map((item, index) => (
                         <div key={index} className='blog text-center mx-2'>
                             <img src={item.image} className='my-2 blog_slide_img' alt=""/>

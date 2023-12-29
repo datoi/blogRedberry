@@ -289,7 +289,7 @@ const Blog = () => {
 
 
     const MoreClick = (item) => {
-        window.location.href = '/moreinfo/' + item.id
+        navigate('/moreinfo/' + item.id)
     };
 
 
