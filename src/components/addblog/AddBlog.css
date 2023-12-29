@@ -135,15 +135,15 @@ input,textarea{
     border-color: purple !important;
 }
 .form-input.empty {
-    background-color: #F2F2FA; /* Set the background color for empty state */
+    background-color: #F2F2FA;
 }
 
 .form-input.invalid {
-    border-color: red; /* Set the border color for invalid state */
-    background-color: #FAF2F3; /* Set the background color for invalid state */
+    border-color: red;
+    background-color: #FAF2F3;
 }
 
 .form-input.valid {
-    border-color: green; /* Set the border color for valid state */
-    background-color: #F8FFF8; /* Set the background color for valid state */
+    border-color: green;
+    background-color: #F8FFF8;
 }

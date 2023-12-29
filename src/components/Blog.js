@@ -5,6 +5,7 @@ import {useNavigate} from 'react-router-dom';
 
 const Blog = () => {
     const [selectedCategoryId, setSelectedCategoryId] = useState(null);
+    const [selectedCategoryIds, setSelectedCategoryIds] = useState([]);
     const [selectedDate, setSelectedDate] = useState('')
     const [isPublished, setPublished] = useState(false);
     const [author, setAuthor] = useState('')
@@ -19,7 +20,7 @@ const Blog = () => {
     const [categories, setCategories] = useState([]);
     const fileInputRef = useRef(null);
     const [isTyping, setIsTyping] = useState(false);
-
+    const [isActive, setIsActive] = useState(false);
 
     const [fileName, setFileName] = useState(null);
 
@@ -33,10 +34,16 @@ const Blog = () => {
         email: '',
     });
     const truncateStyle = {
-        display: '-webkit-box',
+        display:  '-webkit-box',
         WebkitBoxOrient: 'vertical',
         overflow: 'hidden',
         WebkitLineClamp: 2,
+        fontSize: '16px',
+        fontWeight: '400',
+        lineHeight: '28px',
+        letterSpacing: '0em',
+        textAlign: 'left',
+        color: '#404049'
     };
     const token = '1931f8266f98937a118d220178ee826aa383bf384853f22adc853132d317b29d';
 
@@ -97,13 +104,22 @@ const Blog = () => {
     };
     const handleBlogCategoryClick = (categoryId) => {
         categoriesFilter(categoryId);
+        setIsActive(current => !current);
     };
     const categoriesFilter = (categoryId) => {
         setSelectedCategoryId(categoryId);
+        const isCategorySelected = selectedCategoryIds.includes(categoryId);
+
+        setSelectedCategoryIds((prevSelectedIds) =>
+            isCategorySelected
+                ? prevSelectedIds.filter((id) => id !== categoryId)
+                : [...prevSelectedIds, categoryId]
+        );
+
     };
-    const filteredBlogs = selectedCategoryId
+    const filteredBlogs = selectedCategoryIds.length
         ? blogs.filter((blog) =>
-            blog.categories.some((category) => category.id === selectedCategoryId)
+            blog.categories.some((category) => selectedCategoryIds.includes(category.id))
         )
         : blogs;
     const handleAuthorChange = (e) => {
@@ -138,7 +154,7 @@ const Blog = () => {
     }
     const handleDelete = () => {
         setFileName(null);
-        fileInputRef.current.value = null; // Reset the input
+        fileInputRef.current.value = null;
     };
 
     const handleEmailChange = (e) => {
@@ -177,8 +193,6 @@ const Blog = () => {
 
 
     const handlePublish = async () => {
-
-        navigate('/blogredberry')
         const postData = new FormData();
         postData.append('title', post.title);
         postData.append('description', post.description);
@@ -209,6 +223,7 @@ const Blog = () => {
         }
 
         console.log(post)
+        setPopup(true)
     };
 
 
@@ -306,7 +321,9 @@ const Blog = () => {
         handleTyping,
         handleBlur,
         truncateStyle,
-        loginBar
+        loginBar,
+        isActive,
+        selectedCategoryIds,
     }
 }
 

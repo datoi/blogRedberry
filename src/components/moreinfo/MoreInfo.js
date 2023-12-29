@@ -14,7 +14,10 @@ const MoreInfo = () => {
         popupClick,
         loginBar,
         navigate,
-        truncateStyle
+        truncateStyle,
+        handleBlogCategoryClick,
+        filteredBlogs,
+        fetchCategoryTitle
     } = Blog()
     const [currentSlide, setCurrentSlide] = useState(0);
 
@@ -67,14 +70,14 @@ const MoreInfo = () => {
                     </div>
                 </div>
             </header>
-            <div style={{marginTop:'100px'}} className='d-flex justify-content-between'>
-                <div style={{zIndex: '0',}} className=''>
-                    <button style={{ position: 'absolute', marginLeft:'320px'}} onClick={homeClick}
-                            className='border-0 bg-transparent'><img
-                        className=''
-                        src={process.env.PUBLIC_URL + '/Arrow.png'}
-                        alt=""/></button>
-                </div>
+            <div style={{marginTop: '100px'}} className='d-flex justify-content-between'>
+                    <div style={{zIndex: '0',}} className=''>
+                        <button style={{position: 'absolute', marginLeft: '200px'}} onClick={homeClick}
+                                className='border-0 bg-transparent'><img
+                            className=''
+                            src={process.env.PUBLIC_URL + '/Arrow.png'}
+                            alt=""/></button>
+                    </div>
                 <div className='blog_container'>
                     <div style={{width: '720px'}} className='blog'>
                         <img src={process.env.PUBLIC_URL + '/unsplash_01_igFr7hd4.jpg'} className='my-2 blog_img'
@@ -105,7 +108,7 @@ const MoreInfo = () => {
                             disabled={!canSlidePrev}
                             style={{backgroundColor: canSlidePrev ? '#5D37F3' : '#E4E3EB'}}
                         >
-                            <img src={process.env.PUBLIC_URL + '/Arrow 2.png'} alt=''/>
+                            <img className='mb-1' src={process.env.PUBLIC_URL + '/Arrow 2.png'} alt=''/>
                         </button>
                         <button
                             className={`border-0 slide_button ${!canSlideNext ? 'disabled' : ''}`}
@@ -113,29 +116,44 @@ const MoreInfo = () => {
                             disabled={!canSlideNext}
                             style={{backgroundColor: canSlideNext ? '#5D37F3' : '#E4E3EB'}}
                         >
-                            <img className='' src={process.env.PUBLIC_URL + '/Arrow 1.png'} alt=''/>
+                            <img className='mb-1' src={process.env.PUBLIC_URL + '/Arrow 1.png'} alt=''/>
                         </button>
                     </div>
                 </div>
-                <div className='d-flex justify-content-center'>
-                    {blogs.slice(currentSlide, currentSlide + 3).map((item, index) => (
+                <div className='d-flex'>
+                    {filteredBlogs.slice(currentSlide, currentSlide + 3).map((item, index) => (
                         <div key={index} className='blog text-center mx-2'>
                             <img src={item.image} className='my-2 blog_slide_img' alt=""/>
-                            <h5 className='my-2'>{item.author}</h5>
-                            <p className='my-2'>{item.publish_date}</p>
-                            <h3 className='my-2'>{item.title}</h3>
+                            <h5 className='author my-2'>{item.author}</h5>
+                            <p className='publish_date my-2'>{item.publish_date}</p>
+                            <h3 className='title my-2'>{item.title}</h3>
                             {item.categories.map(category => (
-                                <button key={category.id} style={{
-                                    color: category.text_color,
-                                    backgroundColor: category.background_color
-                                }} className='category-button'>
-                                    {category.id}
-                                </button>
+                                <div className='text-start'>
+                                    <button
+                                        key={category.id}
+                                        onClick={() => handleBlogCategoryClick(category.id)}
+                                        style={{
+                                            color: category.text_color,
+                                            backgroundColor: category.background_color,
+                                            whiteSpace: 'nowrap',
+                                            minWidth: 'auto',
+                                            padding: '8px 12px',
+                                            fontSize: '12px',
+                                        }}
+                                        className={`filter-button me-1 my-1 border-0`}
+                                    >
+                                        {fetchCategoryTitle(category.id)}
+                                    </button>
+                                </div>
                             ))}
                             <p style={truncateStyle} className='my-2'>{item.description}</p>
-                            <button onClick={() => MoreClick(item)} className='my-2'>სრულად ნახვა</button>
+                            <button onClick={() => MoreClick(item)}
+                                    className='more_button border-0 bg-transparent my-2'>სრულად ნახვა <img
+                                src={process.env.PUBLIC_URL + '/morearrow.png'}
+                                alt=""/></button>
                         </div>
                     ))}
+
                 </div>
             </div>
         </div>

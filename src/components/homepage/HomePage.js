@@ -13,12 +13,13 @@ const HomePage = () => {
         loginClick,
         loginBar,
         popupClick,
-        selectedCategoryId,
+        selectedCategoryIds,
         filteredBlogs,
         categoriesFilter,
         fetchCategoryTitle,
         handleBlogCategoryClick,
-        truncateStyle
+        truncateStyle,
+        isActive
 
     } = Blog()
 
@@ -27,6 +28,7 @@ const HomePage = () => {
     const loginType = () => {
         setIsTyping(true);
     };
+
     return (
         <div>
             {popup ? <div>
@@ -84,7 +86,7 @@ const HomePage = () => {
                     <img className='page_image' src={process.env.PUBLIC_URL + '/Blog-1024x355 1.jpg'} alt=""/>
                 </div>
             </div>
-            <div className='container categories mt-5' style={{overflowX: 'auto'}}>
+            <div className='container categories my-5' style={{ overflowX: 'auto' }}>
                 <div className="d-flex">
                     {categories.map((category) => (
                         <button
@@ -98,8 +100,9 @@ const HomePage = () => {
                                 minWidth: 'auto',
                                 padding: '8px 12px',
                                 fontSize: '12px',
+                                border: selectedCategoryIds.includes(category.id) ? '1px solid black' : 'none',
                             }}
-                            className={`filter-button m-2 ${selectedCategoryId === category.id ? 'active' : ''}`}
+                            className={`filter-button m-2 ${selectedCategoryIds.includes(category.id) ? 'active' : ''}`}
                         >
                             {category.title}
                         </button>
@@ -134,7 +137,7 @@ const HomePage = () => {
                                         </button>
                                     ))}
                                 </div>
-                                <p className="my-2" style={truncateStyle}>{item.description}</p>
+                                <p className="description my-2" style={truncateStyle}>{item.description}</p>
                                 <button onClick={() => MoreClick(item)} className="more_button my-2 border-0 bg-transparent">სრულად ნახვა <img src={process.env.PUBLIC_URL + '/morearrow.png'}
                                                                                                            alt=""/>
                                 </button>

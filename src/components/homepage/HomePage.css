@@ -46,11 +46,6 @@ img {
 }
 
 .description {
-    display: -webkit-box;
-    WebkitBoxOrient: vertical;
-    overflow: hidden;
-    WebkitLineClamp: 2;
-    font-family: FiraGO;
     font-size: 16px;
     font-weight: 400;
     line-height: 28px;
@@ -88,6 +83,7 @@ img {
     font-weight: 500;
     line-height: 16px;
 }
+
 
 .more_button {
     font-family: FiraGO;

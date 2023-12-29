@@ -23,11 +23,14 @@
             fileInputRef,
             isTyping,
             handleBlur,
-            handleTyping
+            handleTyping,
+            homeClick,
+            popup,
+            closePopupClick
         } = Blog()
         const isOnlyGeorgian = /^[ა-ჰ\s]+$/u.test(author);
         const isEmailValid = email.endsWith("@redberry.ge");
-        const [isValid, setIsValid] = useState(true); // State to track overall validation
+        const [isValid, setIsValid] = useState(true);
 
         useEffect(() => {
             setIsValid(
@@ -76,7 +79,25 @@
 
 
         return (
+
             <div>
+                {popup ? <div>
+                    <div className='overlay'></div>
+                    <div className='popup_Window position-fixed container px-4'>
+                        <header className='d-flex justify-content-end'>
+                            <button className='x_button border-0 mt-3 bg-transparent' onClick={closePopupClick}><img src={process.env.PUBLIC_URL + '/add.png'}
+                                                                                                                     alt=""/></button>
+                        </header>
+                        <img className='mb-2' src={process.env.PUBLIC_URL + '/tick-circle.png'} alt=""/>
+                        <div>
+                            <h3 className='login_title mb-5'>ჩანაწი წარმატებით დაემატა</h3>
+                        </div>
+
+                        <div>
+                            <button className='popup_login border-0' onClick={homeClick}>მთავარ გვერდზე დაბრუნება</button>
+                        </div>
+                    </div>
+                </div> : null}
                 <header className="header py-3">
                     <div className='container d-flex justify-content-center'>
                         <div className="logo">
@@ -84,6 +105,13 @@
                         </div>
                     </div>
                 </header>
+                <div style={{zIndex: '0',}} className='mt-3'>
+                    <button style={{position: 'absolute', marginLeft: '200px'}} onClick={homeClick}
+                            className='border-0 bg-transparent'><img
+                        className=''
+                        src={process.env.PUBLIC_URL + '/Arrow.png'}
+                        alt=""/></button>
+                </div>
                 <div className="add_blog_container my-4">
                     <div className='add_blog_inside_container'>
                         <div className='form_title'>
