@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/blogredberry/static/css/main.27757bf7.css",
-    "main.js": "/blogredberry/static/js/main.c91e6088.js",
+    "main.js": "/blogredberry/static/js/main.d2dea677.js",
     "index.html": "/blogredberry/index.html",
     "main.27757bf7.css.map": "/blogredberry/static/css/main.27757bf7.css.map",
-    "main.c91e6088.js.map": "/blogredberry/static/js/main.c91e6088.js.map"
+    "main.d2dea677.js.map": "/blogredberry/static/js/main.d2dea677.js.map"
   },
   "entrypoints": [
     "static/css/main.27757bf7.css",
-    "static/js/main.c91e6088.js"
+    "static/js/main.d2dea677.js"
   ]
 }
