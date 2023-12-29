@@ -88,8 +88,7 @@ const HomePage = () => {
                     <div className="logo">
                         <button onClick={() => {
                             window.location.reload();
-                        }
-                        } className='border-0 bg-transparent'><img style={{borderRadius: '0'}} className='logo-img'
+                        }} className='border-0 bg-transparent'><img style={{borderRadius: '0'}} className='logo-img'
                                                                    src={process.env.PUBLIC_URL + '/LOGO-02 3.png'}
                                                                    alt="Logo"/>
                         </button>
