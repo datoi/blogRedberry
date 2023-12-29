@@ -231,7 +231,9 @@
                                 </div>
                                 <div className="form-subfield">
                                     <label className="form-label" htmlFor="categories">კატეგორიები*</label>
-                                    <Select isMulti={true}
+                                    <Select
+                                        placeholder='აირჩიეთ კატეგორია'
+                                        isMulti={true}
                                             onChange={handleSelectInputChange}
                                             onMenuOpen={() => {}}
                                             onMenuClose={() => {}}
